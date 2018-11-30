@@ -6,33 +6,14 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+# Analysing the results of the Winton Centre Uncertainty Communication Workshop
+# 26-27 November 2018
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-# Analysing the results of the Uncertainty Workshop 26-27 November 2018
-# 
-
-```{r preamble, echo=FALSE}
+```{r preamble, echo=FALSE, include=FALSE}
 library(RColorBrewer)
 library(viridisLite)
 library(fields)
@@ -48,9 +29,15 @@ worried = dat[,'How.worried.are.you.about.global.warming']
 domore = dat[,'Do.you.think.people.should.do.more.']
 dempol = dat[,'DemPol']
 occur = dat[,'occur']
+unc1 = dat[,'unc1_1']
 
 ```
 
+## How does belief in global warming interact with other aspects?
+
+Respondants were asked "Do you believe global warming is caused by human activities?" before the survey, along with some other questions.
+
+### How worried are you about global warming?
 ```{r belief_v_worried, echo=FALSE}
 #png('graphics/belief_v_worried.png')
 par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
@@ -67,14 +54,12 @@ par(mar = c(5,1,1,5))
 image.plot(x = 1:7, y = 1:7, z = belief.worried.tab, col = byr,
            xlab = '', ylab = '')
 
-#title(xlab = 'Do you believe global warming\n is caused by human activities?',line = 3)
-#title(ylab = 'How worried are you\n about global warming?', line = 3)
-
+print(belief.worried.tab)
 ```
 
 
 
-
+### Do you think people should be doing more or less to reduce global warming?
 
 ```{r belief_v_domore, echo=FALSE}
 #png('graphics/belief_vs_domore.png')
@@ -83,7 +68,7 @@ plot(jitter(belief), jitter(domore), cex = 0.6,
      xlab = '', ylab = ''
 )
 mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
-title(ylab = 'Do you think people should do more?', line = 3)
+title(ylab = 'Do you think people should be doing\n more or less to reduce global warming?', line = 3)
 #dev.off()
 
 belief.domore.tab = table(belief, domore)
@@ -92,9 +77,11 @@ par(mar = c(5,1,1,5))
 image.plot(x = 1:7, y = 1:7, z = belief.domore.tab, col = byr,
            xlab = '', ylab = '')
 
+print(belief.domore.tab)
 
 ```
 
+### Political leaning - Liberal to Conservative
 
 ```{r belief_v_dempol, echo=FALSE}
 #png('graphics/belief_vs_dempol.png')
@@ -103,7 +90,7 @@ plot(jitter(belief), jitter(dempol), cex = 0.6,
      xlab = '', ylab = ''
 )
 mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
-title(ylab = 'DemPol', line = 3)
+title(ylab = 'Liberal to Conservative', line = 3)
 #dev.off()
 
 belief.dempol.tab = table(belief, dempol)
@@ -111,11 +98,9 @@ belief.dempol.tab = table(belief, dempol)
 par(mar = c(5,1,1,5))
 image.plot(x = 1:7, y = 1:7, z = belief.dempol.tab, col = byr,
            xlab = '', ylab = '')
-
-
-
+print(belief.dempol.tab)
 ```
-
+### Given the information you've just seen ... how likely do you think it is that this event will occur?
 ```{r belief_v_occur, echo=FALSE}
 #png('graphics/belief_vs_occur.png')
 par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
@@ -123,14 +108,32 @@ plot(jitter(belief), jitter(occur), cex = 0.6,
      xlab = '', ylab = ''
 )
 mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
-title(ylab = 'Occur', line = 3)
+title(ylab = '... how likely do you think it is\n that this event will occur', line = 3)
 
 belief.occur.tab = table(belief, occur)
 
 par(mar = c(5,1,1,5))
 image.plot(x = 1:7, y = 1:7, z = belief.occur.tab, col = byr,
            xlab = '', ylab = '')
-#dev.off()
+
+print(belief.occur.tab)
 ```
 
+```{r dempol_v_uncertainty, echo=FALSE}
 
+#png('graphics/belief_vs_occur.png')
+par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
+plot(jitter(dempol), jitter(unc1), cex = 0.6,
+     xlab = '', ylab = ''
+)
+mtext('Liberal to Conservative', side = 1,outer = TRUE, line = -3)
+title(ylab = 'How much uncertainty is there about this information', line = 3)
+
+dempol.unc1.tab = table(dempol, unc1)
+
+par(mar = c(5,1,1,5))
+image.plot(x = 1:7, y = 1:10, z = dempol.unc1.tab, col = byr,
+           xlab = '', ylab = '')
+
+print(dempol.unc1.tab)
+```
