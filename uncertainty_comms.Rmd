@@ -1,0 +1,136 @@
+---
+title: "uncertainty_comms"
+author: "Doug McNeall"
+date: "30 November 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Analysing the results of the Uncertainty Workshop 26-27 November 2018
+# 
+
+```{r preamble, echo=FALSE}
+library(RColorBrewer)
+library(viridisLite)
+library(fields)
+
+br = rev(brewer.pal(11, 'RdBu'))
+byr = rev(brewer.pal(11, 'RdYlBu'))
+blues = rev(brewer.pal(9, 'Blues'))
+
+dat = read.csv("data/M2D+Workshop+questionnaire_msedit.csv")
+
+belief = dat[,'Do.you.believe.global.warming.is.caused.by.human.activities']
+worried = dat[,'How.worried.are.you.about.global.warming']
+domore = dat[,'Do.you.think.people.should.do.more.']
+dempol = dat[,'DemPol']
+occur = dat[,'occur']
+
+```
+
+```{r belief_v_worried, echo=FALSE}
+#png('graphics/belief_v_worried.png')
+par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
+plot(jitter(belief), jitter(worried), cex = 0.6,
+     xlab = '', ylab = ''
+)
+mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
+title(ylab = 'How worried are you\n about global warming?', line = 3)
+#dev.off()
+
+belief.worried.tab = table(belief, worried)
+
+par(mar = c(5,1,1,5))
+image.plot(x = 1:7, y = 1:7, z = belief.worried.tab, col = byr,
+           xlab = '', ylab = '')
+
+#title(xlab = 'Do you believe global warming\n is caused by human activities?',line = 3)
+#title(ylab = 'How worried are you\n about global warming?', line = 3)
+
+```
+
+
+
+
+
+```{r belief_v_domore, echo=FALSE}
+#png('graphics/belief_vs_domore.png')
+par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
+plot(jitter(belief), jitter(domore), cex = 0.6,
+     xlab = '', ylab = ''
+)
+mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
+title(ylab = 'Do you think people should do more?', line = 3)
+#dev.off()
+
+belief.domore.tab = table(belief, domore)
+
+par(mar = c(5,1,1,5))
+image.plot(x = 1:7, y = 1:7, z = belief.domore.tab, col = byr,
+           xlab = '', ylab = '')
+
+
+```
+
+
+```{r belief_v_dempol, echo=FALSE}
+#png('graphics/belief_vs_dempol.png')
+par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
+plot(jitter(belief), jitter(dempol), cex = 0.6,
+     xlab = '', ylab = ''
+)
+mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
+title(ylab = 'DemPol', line = 3)
+#dev.off()
+
+belief.dempol.tab = table(belief, dempol)
+
+par(mar = c(5,1,1,5))
+image.plot(x = 1:7, y = 1:7, z = belief.dempol.tab, col = byr,
+           xlab = '', ylab = '')
+
+
+
+```
+
+```{r belief_v_occur, echo=FALSE}
+#png('graphics/belief_vs_occur.png')
+par(mfrow = c(1,2), mar = c(5,5,1,1), las = 1, pty = 's')
+plot(jitter(belief), jitter(occur), cex = 0.6,
+     xlab = '', ylab = ''
+)
+mtext('Do you believe global warming\n is caused by human activities?', side = 1,outer = TRUE, line = -3)
+title(ylab = 'Occur', line = 3)
+
+belief.occur.tab = table(belief, occur)
+
+par(mar = c(5,1,1,5))
+image.plot(x = 1:7, y = 1:7, z = belief.occur.tab, col = byr,
+           xlab = '', ylab = '')
+#dev.off()
+```
+
+
